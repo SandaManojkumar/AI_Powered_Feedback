@@ -4,35 +4,43 @@ import report from "../models/report.js";
 
 export const analyzeFeedback = async (req, res) => {
   const { feedback } = req.body;
-    console.log(feedback)
+  console.log("Feedback:", feedback);
+
   try {
     const response = await axios.post(
-`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,    {
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+      {
         contents: [{ parts: [{ text: feedback }], role: "user" }],
       },
       {
         headers: {
           "Content-Type": "application/json",
-          "X-goog-api-key": config.GEMINI_API_KEY
-        }
+          "X-goog-api-key": config.GEMINI_API_KEY,
+        },
       }
     );
 
-    
+    // ✅ Extract summary text properly
+    const summaryText =
+      response.data?.candidates?.[0]?.content?.parts
+        ?.map((p) => p.text)
+        .join("\n") || "No summary";
 
-    // return response.data;
-    //Example: parse summary & sentiment from Gemini response
-    const summary = response.data?.candidates?.[0]?.content || "No summary";
-    const sentiment = "Positive"; // you can add sentiment detection logic here
-    console.log(summary)
+    // For now just keep sentiment fixed or use another API
+    const sentiment = "Positive";
+
+    // ✅ Save to DB
     const create_db = await report.create({
-        feedback, 
-        summary:JSON.stringify(summary),
-        sentiment
-    })
-    res.json({ success: true, summary, sentiment });
+      feedback,
+      summary: summaryText, // clean string, not JSON.stringify
+      sentiment,
+    });
+
+    console.log("Saved report:", create_db);
+
+    res.json({ success: true, summary: summaryText, sentiment });
   } catch (err) {
-    console.error(err);
+    console.error("Error analyzing feedback:", err.response?.data || err.message);
     res.status(500).json({ success: false, error: "Failed to analyze feedback" });
   }
 };

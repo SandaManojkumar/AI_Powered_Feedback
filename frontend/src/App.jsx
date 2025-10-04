@@ -4,7 +4,7 @@ import Home from './Pages/Home/Home';
 import Profile from './Pages/Profile/Profile';
 import LoginPage from './Pages/LoginPage/LoginPage';
 import Feedback from './Pages/Feedback/Feedback';
-import Reports from './Pages/Report/Report';
+import Reports from './Pages/Report/Report.jsx';
 import './index.css';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import { HeaderMegaMenu } from './Components/Navbar/HeaderMegaMenu';

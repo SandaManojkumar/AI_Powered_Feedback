@@ -54,7 +54,7 @@ class Service {
 
 
   getBaseURL = () => {
-    if (import.meta.env.VITE_BZENV === "development") {
+    if (import.meta.env.VITE_BZENV === "production") {
       return import.meta.env.VITE_DEV_PROXY || "http://localhost:3000"; // fallback proxy
     }
     return window.location.origin;
