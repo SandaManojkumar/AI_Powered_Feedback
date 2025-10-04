@@ -92,7 +92,7 @@ export default function LoginPage() {
           <Text c="white" my="sm" size="lg">
             Login to{" "}
             <Text component="span" fw={700} c="white">
-              Being Zero 
+              Manosta
             </Text>
           </Text>
           <Stack align="center" spacing="lg">
